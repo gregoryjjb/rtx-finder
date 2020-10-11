@@ -8,10 +8,8 @@ const sites = require('./sites');
 
 const logger = new Logger();
 
-const cacheFile = path.join(cacheFolder, 'cache.json')
+const cacheFile = path.join(__dirname, 'cache', 'cache.json')
 let oldCache = null;
-
-if (!fs.existsSync(cacheFolder)) fs.mkdirSync(cacheFolder);
 
 try {
   const raw = fs.readFileSync(cacheFile, 'utf-8');
