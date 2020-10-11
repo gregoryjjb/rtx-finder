@@ -2,15 +2,11 @@ const path = require('path');
 const fs = require('fs');
 
 const selenium = require('selenium-webdriver');
-const chrome = require('selenium-webdriver/chrome');
 
 const Logger = require('./logger');
 const sites = require('./sites');
 
 const logger = new Logger();
-
-// Config
-const browser = process.env.BROWSER === 'firefox' ? 'firefox' : 'chrome'
 
 const cacheFile = path.join(__dirname, 'cache.json');
 let oldCache = null;
@@ -34,8 +30,7 @@ const newCache = {
 }
 
 const main = async () => {
-  // const driver = (new selenium.Builder()).forBrowser(browser).setChromeOptions((new chrome.Options()).addArguments('--headless')).build();
-  const driver = (new selenium.Builder()).forBrowser('chrome').build();
+  const driver = (new selenium.Builder()).forBrowser('firefox').build();
 
   const siteCount = sites.length;
   const productCount = sites.map(s => s.products).flat().length;
