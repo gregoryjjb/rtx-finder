@@ -9,6 +9,7 @@ const sites = require('./sites');
 const logger = new Logger();
 
 logger.log('################# BEGINNING SCRAPE #################');
+logger.log();
 
 ///////////////////////
 // Set up cache
@@ -43,7 +44,9 @@ const main = async () => {
   const siteCount = sites.length;
   const productCount = sites.map(s => s.products).flat().length;
 
-  logger.log(`Scraping ${productCount} products from ${siteCount} sites`)
+  logger.section(`Scraping ${productCount} products from ${siteCount} sites`)
+
+  const changedProducts = [];
 
   for (let site of sites) {
     logger.section(`Scraping ${site.name} products`);
@@ -56,10 +59,13 @@ const main = async () => {
       try {
         const wasAvailable = oldCache?.availability?.[product.url] || false;
         const isAvailable = await site.test(driver, product);
+        const changed = wasAvailable !== isAvailable;
+
         logger.log(`available: ${isAvailable}`);
-        logger.log(`changed: ${wasAvailable !== isAvailable}`);
+        logger.log(`changed: ${changed}`);
 
         newCache.availability[product.url] = isAvailable;
+        if (changed) changedProducts.push({ ...product, available: isAvailable });
       } catch (e) {
         logger.error(e);
       }
@@ -69,6 +75,21 @@ const main = async () => {
 
     logger.endSection();
   }
+
+  logger.endSection();
+
+  logger.log();
+  logger.section(`Summary: ${changedProducts.length} products changed availability`)
+
+  changedProducts.forEach(p => {
+    logger.section(p.name);
+    logger.log(`url: ${p.url}`);
+    logger.log(`available: ${p.available}`)
+  });
+
+  logger.endSection();
+
+  logger.log();
 
   await driver.quit();
 
