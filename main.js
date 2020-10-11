@@ -2,11 +2,15 @@ const path = require('path');
 const fs = require('fs');
 
 const selenium = require('selenium-webdriver');
+const chrome = require('selenium-webdriver/chrome');
 
 const Logger = require('./logger');
 const sites = require('./sites');
 
 const logger = new Logger();
+
+// Config
+const browser = process.env.BROWSER === 'firefox' ? 'firefox' : 'chrome'
 
 const cacheFile = path.join(__dirname, 'cache.json');
 let oldCache = null;
@@ -15,7 +19,7 @@ try {
   const raw = fs.readFileSync(cacheFile, 'utf-8');
   const parsed = JSON.parse(raw);
   oldCache = parsed;
-} catch(e) {
+} catch (e) {
   logger.error('Failed to load cache:', e.message);
 }
 
@@ -30,7 +34,8 @@ const newCache = {
 }
 
 const main = async () => {
-  const driver = (new selenium.Builder()).forBrowser('firefox').build();
+  // const driver = (new selenium.Builder()).forBrowser(browser).setChromeOptions((new chrome.Options()).addArguments('--headless')).build();
+  const driver = (new selenium.Builder()).forBrowser('chrome').build();
 
   const siteCount = sites.length;
   const productCount = sites.map(s => s.products).flat().length;
@@ -44,7 +49,7 @@ const main = async () => {
 
       logger.section(product.name)
       logger.log(`url: ${product.url}`)
-      
+
       try {
         const wasAvailable = oldCache?.availability?.[product.url] || false;
         const isAvailable = await site.test(driver, product);
