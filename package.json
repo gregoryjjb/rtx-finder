@@ -1,0 +1,23 @@
+{
+  "name": "rtx-finder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "selenium-webdriver": "^4.0.0-alpha.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gregoryjjb/rtx-finder.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gregoryjjb/rtx-finder/issues"
+  },
+  "homepage": "https://github.com/gregoryjjb/rtx-finder#readme"
+}
