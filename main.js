@@ -8,6 +8,11 @@ const sites = require('./sites');
 
 const logger = new Logger();
 
+logger.log('################# BEGINNING SCRAPE #################');
+
+///////////////////////
+// Set up cache
+
 const cacheFile = path.join(__dirname, 'cache', 'cache.json')
 let oldCache = null;
 
@@ -28,6 +33,9 @@ const newCache = {
   endTime: null,
   availability: {}
 }
+
+///////////////////////
+// Main
 
 const main = async () => {
   const driver = (new selenium.Builder()).forBrowser('firefox').build();
@@ -67,4 +75,4 @@ const main = async () => {
   fs.writeFileSync(cacheFile, JSON.stringify(newCache));
 }
 
-main().then(() => console.log('Scrape finished'));
+main().then(() => logger.log('################# SCRAPE FINISHED #################'));
