@@ -81,7 +81,10 @@ const main = async () => {
 
   await driver.quit();
 
-  logger.section(`Summary: ${changedProducts.length} products changed availability`);
+  const available = changedProducts.filter(p => p.available);
+  const unavailable = changedProducts.filter(p => !p.available);
+
+  logger.section(`Summary: ${changedProducts.length} changed, ${available.length} available`);
 
   changedProducts.forEach(p => {
     logger.section(p.name);
@@ -95,8 +98,6 @@ const main = async () => {
   logger.section('Sending notifications');
   logger.log();
 
-  const available = changedProducts.filter(p => p.available);
-  const unavailable = changedProducts.filter(p => !p.available);
 
   const client = twilio();
   const twilioPhone = process.env.TWILIO_PHONE;

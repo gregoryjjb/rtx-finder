@@ -4,8 +4,13 @@ module.exports = [
     test: async (driver, product) => {
       await driver.get(product.url)
       const el = await driver.findElement({ className: 'fulfillment-add-to-cart-button' });
-      const text = await el.getText();
-      return !text.toLowerCase().includes('sold out');
+      const text = (await el.getText()).toLowerCase();
+      
+      if (text.includes('sold out') || text.includes('coming soon')) {
+        return false;
+      } else {
+        return true;
+      }
     },
     products: [
       {
