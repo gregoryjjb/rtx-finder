@@ -61,7 +61,7 @@ const main = async () => {
 
       try {
         const wasAvailable = oldCache?.availability?.[product.url] || false;
-        const isAvailable = false; // await site.test(driver, product);
+        const isAvailable = await site.test(driver, product);
         const changed = wasAvailable !== isAvailable;
 
         logger.log(`available: ${isAvailable}`);
