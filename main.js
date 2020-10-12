@@ -1,7 +1,10 @@
+require('dotenv').config();
+
 const path = require('path');
 const fs = require('fs');
 
 const selenium = require('selenium-webdriver');
+const twilio = require('twilio');
 
 const Logger = require('./logger');
 const sites = require('./sites');
@@ -58,7 +61,7 @@ const main = async () => {
 
       try {
         const wasAvailable = oldCache?.availability?.[product.url] || false;
-        const isAvailable = await site.test(driver, product);
+        const isAvailable = false; // await site.test(driver, product);
         const changed = wasAvailable !== isAvailable;
 
         logger.log(`available: ${isAvailable}`);
@@ -69,17 +72,16 @@ const main = async () => {
       } catch (e) {
         logger.error(e);
       }
-
       logger.endSection();
     }
-
     logger.endSection();
   }
-
   logger.endSection();
-
   logger.log();
-  logger.section(`Summary: ${changedProducts.length} products changed availability`)
+
+  await driver.quit();
+
+  logger.section(`Summary: ${changedProducts.length} products changed availability`);
 
   changedProducts.forEach(p => {
     logger.section(p.name);
@@ -88,10 +90,33 @@ const main = async () => {
   });
 
   logger.endSection();
-
   logger.log();
 
-  await driver.quit();
+  logger.section('Sending notifications');
+  logger.log();
+
+  const available = changedProducts.filter(p => p.available);
+  const unavailable = changedProducts.filter(p => !p.available);
+
+  const client = twilio();
+  const twilioPhone = process.env.TWILIO_PHONE;
+  const myPhone = process.env.NOTIFICATION_PHONE;
+
+  if (available.length > 0) {
+    const availableString = available.map(p => `${p.name} ${p.url}`).join('\n');
+    const availableMessage = `AVAILABLE:\n${availableString}`;
+    logger.log(availableMessage);
+    await client.messages.create({ body: availableMessage, to: myPhone, from: twilioPhone });
+  }
+
+  if (unavailable.length > 0) {
+    const unavailableString = unavailable.map(p => `${p.name} ${p.url}`).join('\n');
+    const unavailableMessage = `NO LONGER AVAILABLE:\n${unavailableString}`;
+    logger.log(unavailableMessage);
+    await client.messages.create({ body: unavailableMessage, to: myPhone, from: twilioPhone });
+  }
+
+  logger.endSection();
 
   fs.writeFileSync(cacheFile, JSON.stringify(newCache));
 }

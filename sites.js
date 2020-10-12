@@ -12,10 +12,10 @@ module.exports = [
         "name": "NVIDIA GeForce RTX 3080 10GB GDDR6X PCI Express 4.0 Graphics Card - Titanium and Black",
         "url": "https://www.bestbuy.com/site/nvidia-geforce-rtx-3080-10gb-gddr6x-pci-express-4-0-graphics-card-titanium-and-black/6429440.p?skuId=6429440"
       },
-      {
-        "name": "GIGABYTE - GeForce RTX 3080 10G GDDR6X PCI Express 4.0 Graphics Card White",
-        "url": "https://www.bestbuy.com/site/gigabyte-geforce-rtx-3080-10g-gddr6x-pci-express-4-0-graphics-card-white/6436219.p?skuId=6436219"
-      },
+      // {
+      //   "name": "GIGABYTE - GeForce RTX 3080 10G GDDR6X PCI Express 4.0 Graphics Card White",
+      //   "url": "https://www.bestbuy.com/site/gigabyte-geforce-rtx-3080-10g-gddr6x-pci-express-4-0-graphics-card-white/6436219.p?skuId=6436219"
+      // },
       // {
       //   "name": "EVGA - GeForce RTX 3080 10GB GDDR6X PCI Express 4.0 Graphics Card",
       //   "url": "https://www.bestbuy.com/site/evga-geforce-rtx-3080-10gb-gddr6x-pci-express-4-0-graphics-card/6436195.p?skuId=6436195"

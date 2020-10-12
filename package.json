@@ -4,7 +4,9 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
-    "selenium-webdriver": "^4.0.0-alpha.7"
+    "dotenv": "^8.2.0",
+    "selenium-webdriver": "^4.0.0-alpha.7",
+    "twilio": "^3.49.4"
   },
   "devDependencies": {},
   "scripts": {
