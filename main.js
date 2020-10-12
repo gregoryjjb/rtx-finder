@@ -82,7 +82,6 @@ const main = async () => {
   await driver.quit();
 
   const available = changedProducts.filter(p => p.available);
-  const unavailable = changedProducts.filter(p => !p.available);
 
   logger.section(`Summary: ${changedProducts.length} changed, ${available.length} available`);
 
@@ -108,13 +107,6 @@ const main = async () => {
     const availableMessage = `AVAILABLE:\n${availableString}`;
     logger.log(availableMessage);
     await client.messages.create({ body: availableMessage, to: myPhone, from: twilioPhone });
-  }
-
-  if (unavailable.length > 0) {
-    const unavailableString = unavailable.map(p => `${p.name} ${p.url}`).join('\n');
-    const unavailableMessage = `NO LONGER AVAILABLE:\n${unavailableString}`;
-    logger.log(unavailableMessage);
-    await client.messages.create({ body: unavailableMessage, to: myPhone, from: twilioPhone });
   }
 
   logger.endSection();
