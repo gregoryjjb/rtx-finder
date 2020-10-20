@@ -9,6 +9,8 @@ const twilio = require('twilio');
 const Logger = require('./logger');
 const sites = require('./sites');
 
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+
 const logger = new Logger();
 
 logger.log('################# BEGINNING SCRAPE #################');
@@ -73,6 +75,8 @@ const main = async () => {
         logger.error(e);
       }
       logger.endSection();
+
+      await sleep(1000);
     }
     logger.endSection();
   }
