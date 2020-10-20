@@ -9,12 +9,26 @@ const twilio = require('twilio');
 const Logger = require('./logger');
 const sites = require('./sites');
 
+///////////////////////
+// Utility functions
+
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+
+const truncate = (str, length) => {
+  if (str.length <= length) return str;
+
+  return str.substring(0, length - 3) + '...';
+}
+
+
+///////////////////////
+// Set up logging
 
 const logger = new Logger();
 
 logger.log('################# BEGINNING SCRAPE #################');
 logger.log();
+
 
 ///////////////////////
 // Set up cache
@@ -39,6 +53,7 @@ const newCache = {
   endTime: null,
   availability: {}
 }
+
 
 ///////////////////////
 // Main
@@ -107,7 +122,7 @@ const main = async () => {
   const myPhone = process.env.NOTIFICATION_PHONE;
 
   if (available.length > 0) {
-    const availableString = available.map(p => `${p.name} ${p.url}`).join('\n');
+    const availableString = available.map(p => `${truncate(p.name, 40)} ${p.url}`).join('\n');
     const availableMessage = `AVAILABLE:\n${availableString}`;
     logger.log(availableMessage);
     await client.messages.create({ body: availableMessage, to: myPhone, from: twilioPhone });
